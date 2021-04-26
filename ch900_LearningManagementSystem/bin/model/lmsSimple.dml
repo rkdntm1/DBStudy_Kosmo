@@ -1,0 +1,147 @@
+/* Selection */
+-- 학과 정보 중 전체를 찾자
+select * 
+  from t_dept;
+
+-- 학과 정보 중 id값이 920보다 큰 것들을 찾자
+select *     
+  from t_dept 
+ where id > 920;
+ 
+-- 학과 정보 중 id값이 920보다 크거나 또는 사무실이 '201호'인 것들을 찾자
+select *     
+  from t_dept 
+ where id > 920
+   or office = '201호';
+ 
+-- 학과 정보 중 id값이 920보다 크면서 사무실이 '207호'이거나 또는 사무실이 '201호'인 것들을 것들을 찾자
+select *     
+  from t_dept 
+ where (id > 920
+   and office = '207호')
+    or office = '201호';
+  
+-- 학과 정보 중 id값이 920보다 크거나 사무실이 '207호'이거나 '201호'인 것들을 찾자
+select *     
+  from t_dept 
+ where id > 920
+    or office = '207호'
+    or office = '201호';
+select *     
+  from t_dept 
+ where id > 920
+    or office in ('207호', '201호');  -- or in 
+select *     
+  from t_dept 
+ where id > 920
+    or office like '20__'; -- like 사용
+select *     
+  from t_dept -- 집합 컬럼 도메인 테이블
+ where id > 920
+    or office like '20%';  -- like 사용
+
+/* Projection */
+-- 학과 정보 중 id값이 920보다 크거나 사무실이 '207호'이거나 '201호'인 것들을 찾아서 그 값들 중 id, name만 보여줘
+select id, name      
+  from t_dept 
+ where id > 920
+    or office in ('207호', '201호');  -- or in     
+    
+-- 유일한(distinct). 제일 앞에 나타남 
+select distinct year, name
+  from t_student;
+  
+/* 재명명 */
+--column 재명명
+select id, name as eman, office     
+  from t_dept
+ where id > 920
+    or office like '20%';  -- like 사용
+    
+--Set 재명명
+select id, name as eman, office     
+  from (
+  	   select *
+  	     from t_dept
+  	    where id > 920) notcom;
+
+/* 집합 연산   --- 합, 차, 교, 곱(순수 카테션 프로덕트는 안쓰임)  */
+select *
+  from t_dept
+ where id > 920
+ union -- 합집합
+select *
+  from t_dept
+ where id <= 920
+    
+select *
+  from t_dept
+ where id >= 920
+ union all -- 중복제거없는 합집합
+select *
+  from t_dept
+ where id <= 920
+     
+select *
+  from t_dept
+ where id <= 923
+intersect -- 교집합 
+select *
+  from t_dept
+ where id >= 923    
+ 
+select *
+  from t_dept
+ where id <= 923
+ minus -- 차집합
+select *
+  from t_dept
+ where id >= 923
+ 
+select *
+  from t_dept, t_professor
+  
+select *   
+  from t_dept, t_takes
+  
+-- FK(외래키) 를 통해서 t_dept 와 t_student를 연결 시킴
+select s.*, d.*
+  from t_dept d, t_student s
+ where s.dept_id = d.id;
+  
+-- 301호에서 개설된 강좌
+select *
+  from t_class
+ where class_room = '301호';
+ 
+-- 301호에서 개설된 강좌의 과목명
+select c.title
+  from (select *
+  		  from t_class
+ 		 where class_room = '301호') c301, t_course c
+ where c301.course_id = c.id 
+ 
+select title
+  from t_course
+ where id in (select course_id
+  		  from t_class
+ 		 where class_room = '301호');
+ 
+ 
+  
+create table t_course (
+	id		char(4)			primary key,
+	title	varchar2(500)	not null,
+	credit  integer			not null
+);
+
+create table t_class (
+	id			char(7)			primary key,
+	prof_id		integer			references t_professor (id),
+	course_id	char(4)			references t_course (id),
+	year 		integer,
+	semester	integer,
+	division	char(1),
+	class_room  varchar2(500),
+	enroll		integer			
+);

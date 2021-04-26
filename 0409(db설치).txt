@@ -1,0 +1,16 @@
+mvnrepository.com
+
+-ojdbc
+oracle sql developer
+
+oracle : orcl 1234
+
+DB설치
+- 설치위치 C에 oracleDB 폴더 만들어서 경로 설정
+비밀번호 설정
+ - JDBC 
+oracle sql developer
+- c에 복사
+- 설치 
+- 실행
+-새로만들기 -  Name : db_conn / 사용자 이름 : system 비밀번호 1234 / SID orcl - 테스트 -> 성공후 접속 

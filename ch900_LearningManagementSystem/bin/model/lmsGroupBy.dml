@@ -1,0 +1,36 @@
+-- 학과 별 학생수 조회
+select d.id, count(s.id)
+  from t_dept d 
+       left outer join t_student s on d.id = s.dept_id 
+ group by d.id;
+ 
+select *
+  from (select d.id, count(s.id)
+  		  from t_dept d 
+  			   left outer join t_student s on d.id = s.dept_id 
+ 		 group by d.id) dept;
+ 		 
+select *    -- group by 와 짝 맞추지 않으면 컴파일 오류 발생 
+  from t_dept d 
+       left outer join t_student s on d.id = s.dept_id 
+ group by d.id; 
+ 
+-- 전체 학생 중 동명 이인을 찾아주세요.
+select name, count(*)
+  from t_student
+ group by name 
+having count(*) > 1;
+
+create table t_dept (
+	id		integer			primary key,
+	name	varchar2(500)	not null,
+	office  varchar2(500)	not null
+);
+
+create table t_student (
+	id			integer			primary key,
+	dept_id		integer			references t_dept (id),
+	ssn 		char(14)		not null,
+	name		varchar2(500)	not null,
+	year  		integer			not null
+);
