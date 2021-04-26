@@ -1,0 +1,4 @@
+data -> information -> knowledge -> wisdom 
+
+DB에 그때그때 insert 하면 성능이 느리다 .
+ㄴ> Batch(=buffer)를 사용 하여 일괄처리를 통해서 쭉 모은다음

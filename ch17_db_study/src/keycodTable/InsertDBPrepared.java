@@ -44,7 +44,7 @@ public class InsertDBPrepared {
 		try {
 			PreparedStatement stmt = conn.prepareStatement("insert into t_id_seed(seq_id, seed) values(?, ?)");
 			long seqId = 0;
-			char[] chSeed = new char[5];
+			char[] chSeed = new char[4];
 			for (int i = 0; i < 62; i++) {
 				chSeed[0] = ch[i];
 				for (int j = 0; j < 62; j++) {
@@ -53,14 +53,13 @@ public class InsertDBPrepared {
 						chSeed[2] = ch[k];
 						for (int l = 0; l < 62; l++) {
 							chSeed[3] = ch[l];
-							for (int m = 0; m < 62; m++) {
-								chSeed[4] = ch[m];
-								stmt.setLong(1, seqId++);
-								stmt.setString(2, new String(chSeed));
-								
-								stmt.addBatch(); // 대용량 처리의 기본(=> buffer같은 기능)
-								stmt.clearParameters();
-							}
+							
+							stmt.setLong(1, seqId++);
+							stmt.setString(2, new String(chSeed));
+							
+							stmt.addBatch(); // 대용량 처리의 기본(=> buffer같은 기능)
+							stmt.clearParameters();
+						
 						}
 					}
 					stmt.executeBatch();

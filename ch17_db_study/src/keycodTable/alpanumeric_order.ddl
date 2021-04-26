@@ -13,3 +13,4 @@ BEGIN
 	RETURN ret;
 END;
 
+select get_id(15) from dual
